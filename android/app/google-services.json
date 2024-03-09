@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "563403666343",
+    "project_id": "nekoflixx-8429b",
+    "storage_bucket": "nekoflixx-8429b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:563403666343:android:64b998f25f6c9717af3c82",
+        "android_client_info": {
+          "package_name": "com.example.nekoflixx"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKmCp_6VcxPb7iYk3oX-tEy0eeGSP5PiU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
