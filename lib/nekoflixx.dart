@@ -1,25 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:nekoflixx/colors.dart';
-import 'package:nekoflixx/models/user_management_service.dart';
+import 'package:nekoflixx/screens/home_screen.dart';
 import 'package:nekoflixx/screens/login_screen.dart';
-import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class Nekoflixx extends StatelessWidget {
+class Nekoflixx extends StatefulWidget {
   const Nekoflixx({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    // Load users from storage when the app starts
-    Provider.of<UserManagementService>(context, listen: false)
-        .loadUsersFromStorage();
+  State<Nekoflixx> createState() => _NekoflixxState();
+}
 
+class _NekoflixxState extends State<Nekoflixx> {
+  Widget _initialScreen = const LoginScreen();
+
+  @override
+  void initState() {
+    super.initState();
+    _loadInitialScreen();
+  }
+
+  Future<void> _loadInitialScreen() async {
+    final prefs = await SharedPreferences.getInstance();
+    final isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+    setState(() {
+      _initialScreen = isLoggedIn ? const HomeScreen() : const LoginScreen();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: "Nekoflixx",
       theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: Colours.scaffoldBgColor,
       ),
-      home: const LoginScreen(),
+      home: _initialScreen,
     );
   }
 }

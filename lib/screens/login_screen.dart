@@ -1,12 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:nekoflixx/colors.dart';
 import 'package:nekoflixx/constants.dart';
-import 'package:nekoflixx/models/user_management_service.dart';
 import 'package:nekoflixx/screens/home_screen.dart';
 import 'package:nekoflixx/screens/sign_up_screen.dart';
 import 'package:nekoflixx/widgets/exit_confirmation.dart';
 import 'package:nekoflixx/widgets/nekoflixx_app_bar.dart';
-import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -16,46 +16,28 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final TextEditingController _usernameController = TextEditingController();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   String? _emailErrorText;
   String? _passwordError;
 
-  void _login() {
-    String username = _usernameController.text.trim();
-    String password = _passwordController.text.trim();
+  Future<void> _login() async {
+    try {
+      await _auth.signInWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+      );
 
-    // Accessing the UserManagementService from the Provider
-    UserManagementService userManagementService =
-        Provider.of<UserManagementService>(context, listen: false);
-    if (username.isEmpty) {
-      setState(() {
-        _emailErrorText = "Username cannot be empty";
-      });
-    } else if (!userManagementService.userExist(username)) {
-      setState(() {
-        _emailErrorText = "Username does not exist";
-      });
-    } else if (!userManagementService.validatePassword(username, password)) {
-      setState(() {
-        _passwordError = "Wrong password";
-      });
-    } else {
-      // Clear the text fields
-      _usernameController.clear();
-      _passwordController.clear();
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('isLoggedIn', true);
 
-      // Clear any previous error message
-      setState(() {
-        _emailErrorText = null;
-        _passwordError = null;
-      });
-
-      // Navigate to the home screen
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => const HomeScreen(),
-        ),
+        MaterialPageRoute(builder: (context) => const HomeScreen()),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.toString())),
       );
     }
   }
@@ -64,7 +46,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     var credentials = [
       TextField(
-        controller: _usernameController,
+        controller: _emailController,
         onChanged: (_) {
           setState(() {
             _emailErrorText = null;

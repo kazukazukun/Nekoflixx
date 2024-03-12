@@ -1,9 +1,14 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:nekoflixx/models/user_management_service.dart';
-import 'package:nekoflixx/nekoflixx.dart';
-import 'package:provider/provider.dart';
+import 'package:nekoflixx/firebase_options.dart';
+import 'package:nekoflixx/nekoflixx.dart'; // Your main app widget
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding
+      .ensureInitialized(); // Ensure plugin services are initialized
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  ); // Initialize Firebase
   runApp(const MyApp());
 }
 
@@ -12,9 +17,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => UserManagementService(),
-      child: const Nekoflixx(),
-    );
+    return const Nekoflixx();
   }
 }
