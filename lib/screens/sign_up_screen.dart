@@ -28,7 +28,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
     String password = _passwordController.text.trim();
     String confirmPassword = _confirmPasswordController.text.trim();
 
-    if (email.isEmpty || password.isEmpty || password != confirmPassword) {
+    if (email.isEmpty ||
+        password.isEmpty ||
+        password != confirmPassword ||
+        password.length < 6) {
       if (email.isEmpty) {
         setState(() {
           _emailErrorText = "Email cannot be empty";
@@ -37,6 +40,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
       if (password.isEmpty) {
         setState(() {
           _passwordError = "Password cannot be empty";
+        });
+      } else if (password.length < 6) {
+        setState(() {
+          _passwordError = "Password has to be at least 6 characters long";
         });
       }
       if (password != confirmPassword) {
@@ -114,13 +121,31 @@ class _SignUpScreenState extends State<SignUpScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ...credentials,
-            TextButton(
-              onPressed: () => Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => const LoginScreen())),
-              child: const Text(
-                "Already have an account? Login",
-                style: TextStyle(color: Colors.white),
-              ),
+            const SizedBox(
+              height: Constants.signUpAndInPageSpacing,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  "Already have an account?",
+                  style: TextStyle(color: Colours.textWhiteColor),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    // Action for "Login"
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const LoginScreen(),
+                      ),
+                    );
+                  },
+                  child: const Text(
+                    " Login",
+                    style: TextStyle(color: Colours.signUpAndInButtonColor),
+                  ),
+                ),
+              ],
             ),
           ],
         ),

@@ -17,7 +17,7 @@ class API {
           .map((mediaEntity) => MediaEntity.fromJson(mediaEntity))
           .toList();
     } else {
-      throw Exception("Failed to load movies");
+      throw Exception("Failed to load media");
     }
   }
 
