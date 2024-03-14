@@ -75,9 +75,6 @@ class _DiscoverTvPage extends State<DiscoverTvPage> {
   }
 
   void showGenreMenu(BuildContext context, List<Genre> movieGenres) {
-    final RenderBox appBar = context.findRenderObject() as RenderBox;
-    final Offset offset = appBar.localToGlobal(Offset.zero);
-
     showModalBottomSheet(
       context: context,
       builder: (context) {
