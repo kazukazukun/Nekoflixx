@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nekoflixx/constants.dart';
 import 'package:nekoflixx/nekoflixx.dart';
 import 'package:video_player/video_player.dart';
 
@@ -15,7 +16,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.asset("assets/splashScreenLogo.mp4")
+    _controller = VideoPlayerController.asset(Constants.appIntroAnimation)
       ..initialize().then((_) {
         setState(() {});
         _controller.play();

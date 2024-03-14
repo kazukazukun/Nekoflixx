@@ -71,20 +71,26 @@ class API {
   }
 
   Future<List<MediaEntity>> getMoviesByGenre(int genreID) async {
+    if (genreID == -1) {
+      return _getMoviesWithAllGenres();
+    }
     return _fetchMedia(
         "/discover/movie", "&with_genres=$genreID&sort_by=popularity.desc");
   }
 
   Future<List<MediaEntity>> getTvsByGenre(int genreID) async {
+    if (genreID == -1) {
+      return _getTvsWithAllGenres();
+    }
     return _fetchMedia(
         "/discover/tv", "&with_genres=$genreID&sort_by=popularity.desc");
   }
 
-  Future<List<MediaEntity>> getMoviesWithAllGenres() async {
+  Future<List<MediaEntity>> _getMoviesWithAllGenres() async {
     return _fetchMedia("/discover/movie", "&sort_by=popularity.desc");
   }
 
-  Future<List<MediaEntity>> getTvsWithAllGenres() async {
+  Future<List<MediaEntity>> _getTvsWithAllGenres() async {
     return _fetchMedia("/discover/tv", "&sort_by=popularity.desc");
   }
 }

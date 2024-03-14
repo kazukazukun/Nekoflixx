@@ -20,7 +20,7 @@ class SlidingMediaRow extends StatelessWidget {
         future: mediaEntityList,
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return Center(child: Text(snapshot.error.toString()));
+            return Center(child: Text(snapshot.error.toString()));//////////////////////////add error handling
           } else if (snapshot.hasData) {
             if (isMoving) {
               return MovingSlider(snapshot: snapshot);

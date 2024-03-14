@@ -12,6 +12,12 @@ class GenreProvider extends ChangeNotifier {
   Future<void> fetchGenres() async {
     _movieGenres = await API().getMovieGenres();
     _tvGenres = await API().getTvGenres();
+    if (_movieGenres[0].genreId != -1) {
+      _movieGenres.insert(0, Genre(genreId: -1, genreName: 'All'));
+    }
+    if (_tvGenres[0].genreId != -1) {
+      _tvGenres.insert(0, Genre(genreId: -1, genreName: 'All'));
+    }
     notifyListeners();
   }
 }
