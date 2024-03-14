@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:nekoflixx/models/genre_provider.dart';
+import 'package:provider/provider.dart';
 
-class DiscoverMoviesPage extends StatefulWidget {
-  const DiscoverMoviesPage({super.key});
+class DiscoverMoviesPage extends StatelessWidget {
+  const DiscoverMoviesPage({Key? key}) : super(key: key);
 
-  @override
-  State<DiscoverMoviesPage> createState() => _DiscoverMoviesPageState();
-}
-
-class _DiscoverMoviesPageState extends State<DiscoverMoviesPage> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Consumer<GenreProvider>(
+      builder: (context, genreProvider, _) {
+        final movieGenres = genreProvider.movieGenres;
+        // Use movieGenres list here
+        return Container(); // Replace with your actual UI
+      },
+    );
   }
 }

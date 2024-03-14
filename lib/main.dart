@@ -1,7 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:nekoflixx/firebase/firebase_options.dart';
-import 'package:nekoflixx/screens/splash_screen.dart'; // Your main app widget
+import 'package:nekoflixx/models/genre_provider.dart';
+import 'package:nekoflixx/screens/splash_screen.dart';
+import 'package:provider/provider.dart'; // Your main app widget
 
 void main() async {
   WidgetsFlutterBinding
@@ -9,7 +11,10 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   ); // Initialize Firebase
-  runApp(const MyApp());
+  runApp(ChangeNotifierProvider(
+    create: (_) => GenreProvider(),
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -23,4 +28,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-

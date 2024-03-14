@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:nekoflixx/colors.dart';
+import 'package:nekoflixx/models/genre_provider.dart';
 import 'package:nekoflixx/screens/home_screen.dart';
 import 'package:nekoflixx/screens/login_screen.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Nekoflixx extends StatefulWidget {
@@ -26,6 +28,7 @@ class _NekoflixxState extends State<Nekoflixx> {
     setState(() {
       _initialScreen = isLoggedIn ? const HomeScreen() : const LoginScreen();
     });
+     Provider.of<GenreProvider>(context, listen: false).fetchGenres();
   }
 
   @override
