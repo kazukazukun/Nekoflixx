@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nekoflixx/constants.dart';
 import 'package:nekoflixx/pages/discover_movies_page.dart';
 import 'package:nekoflixx/pages/discover_tv_page.dart';
 
@@ -32,14 +33,18 @@ class _DiscoverPageState extends State<DiscoverPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        bottom: TabBar(
-          controller: _tabController,
-          tabs: const [
-            Tab(text: 'Movies'),
-            Tab(text: 'TV'),
-          ],
+      appBar: PreferredSize(
+        preferredSize:
+            const Size.fromHeight(Constants.discoverPageAppBarHeight),
+        child: AppBar(
+          backgroundColor: Colors.transparent,
+          bottom: TabBar(
+            controller: _tabController,
+            tabs: const [
+              Tab(text: 'Movies'),
+              Tab(text: 'TV'),
+            ],
+          ),
         ),
       ),
       body: TabBarView(

@@ -5,4 +5,5 @@ class Constants {
   static const double signUpAndInPageSpacing = 20;
   static const double spacingBetweenSliders = 32;
   static const double searchPageSpacing = 16;
+  static const double discoverPageAppBarHeight = 50;
 }
