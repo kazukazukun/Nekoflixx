@@ -58,8 +58,16 @@ class API {
     return _fetchMedia("movie/$movieID/similar", "");
   }
 
+  Future<List<MediaEntity>> getSimilarTvs(int tvID) async {
+    return _fetchMedia("tv/$tvID/similar", "");
+  }
+
   Future<List<MediaEntity>> getMovieByID(int movieID) async {
     return _fetchMedia("movie/$movieID", "");
+  }
+
+  Future<List<MediaEntity>> getTvByID(int tvID) async {
+    return _fetchMedia("tv/$tvID", "");
   }
 
   Future<List<Genre>> getMovieGenres() async {
