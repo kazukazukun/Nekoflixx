@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:nekoflixx/api/api.dart';
 import 'package:nekoflixx/firebase/firestore_service.dart';
+import 'package:nekoflixx/models/actor.dart';
 import 'package:nekoflixx/models/media_entity.dart';
-import 'package:nekoflixx/widgets/details_app_bar.dart';
-import 'package:nekoflixx/widgets/tag.dart';
+import 'package:nekoflixx/models/movie.dart';
+import 'package:nekoflixx/models/tv.dart';
 
 class DetailsScreen extends StatefulWidget {
   const DetailsScreen({Key? key, required this.mediaEntity}) : super(key: key);
@@ -18,16 +19,21 @@ class _DetailsScreenState extends State<DetailsScreen> {
   bool _isInWatchlist = false;
   bool _isLoading = true;
 
+  late Movie _movieDetails;
+  late TV _tvDetails;
+  late Actor _actorDetails;
+
   @override
   void initState() {
     super.initState();
     _checkWatchlistStatus();
+    _fetchMediaDetails();
   }
 
   Future<void> _checkWatchlistStatus() async {
     try {
-      bool isInWatchlist =
-          await _firestoreService.isInWatchlist(widget.mediaEntity.id);
+      bool isInWatchlist = await _firestoreService
+          .isInWatchlist(widget.mediaEntity.id.toString());
       setState(() {
         _isInWatchlist = isInWatchlist;
         _isLoading = false;
@@ -46,8 +52,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
     });
     try {
       // Pass the current status to the method
-      await _firestoreService.toggleWatchlistStatus(
-          widget.mediaEntity.id, _isInWatchlist);
+      await _firestoreService.toggleWatchlistStatus(widget.mediaEntity);
       _checkWatchlistStatus(); // Refresh status after toggling
     } catch (e) {
       // Handle the error appropriately
@@ -59,73 +64,39 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   Widget _watchlistButton() {
     return _isLoading
-        ? CircularProgressIndicator()
+        ? const CircularProgressIndicator()
         : IconButton(
-            icon: _isInWatchlist ? Icon(Icons.check) : Icon(Icons.add),
+            icon: _isInWatchlist
+                ? const Icon(Icons.check)
+                : const Icon(Icons.add),
             onPressed: _toggleWatchlistStatus,
             tooltip:
                 _isInWatchlist ? 'Remove from Watchlist' : 'Add to Watchlist',
           );
   }
 
+  Future<void> _fetchMediaDetails() async {
+    try {
+      if (widget.mediaEntity.mediaType == 'movie') {
+        _movieDetails = await API().getMovieDetails(widget.mediaEntity.id);
+      } else if (widget.mediaEntity.mediaType == 'tv') {
+        _tvDetails = await API().getTvDetails(widget.mediaEntity.id);
+      } else if (widget.mediaEntity.mediaType == 'person') {
+        _actorDetails = await API().getActorDetails(widget.mediaEntity.id);
+      }
+      setState(() {
+        _isLoading = false;
+      });
+    } catch (e) {
+      // Handle error
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.mediaEntity.name),
-        actions: [
-          _watchlistButton()
-        ], // Positioned the button in the app bar for accessibility
-      ),
-      body: CustomScrollView(
-        slivers: [
-          DetailsAppBar(media: widget.mediaEntity),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.all(12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    widget.mediaEntity.name,
-                    style: GoogleFonts.belleza(
-                        fontSize: 45, fontWeight: FontWeight.w600),
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(height: 26),
-                  Text("Overview",
-                      style: GoogleFonts.openSans(
-                          fontSize: 25, fontWeight: FontWeight.w800)),
-                  SizedBox(height: 16),
-                  Text(widget.mediaEntity.overview,
-                      style: GoogleFonts.roboto(
-                          fontSize: 17, fontWeight: FontWeight.w600)),
-                  SizedBox(height: 16),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      if (widget.mediaEntity.mediaType == "movie")
-                        Tag(
-                            txt: "Release date",
-                            content: widget.mediaEntity.releaseDate)
-                      else
-                        Tag(
-                            txt: "First air date",
-                            content: widget.mediaEntity.releaseDate),
-                      Tag(
-                        txt: "Rating",
-                        content:
-                            "${widget.mediaEntity.voteAverage.toStringAsFixed(1)}/10",
-                      ),
-                    ],
-                  ),
-                  // Optional: Add additional movie details or actions here
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
+    return Scaffold();
   }
 }

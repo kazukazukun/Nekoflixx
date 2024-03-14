@@ -44,7 +44,7 @@ class MovingSlider extends StatelessWidget {
                 child: Image.network(
                     filterQuality: FilterQuality.high,
                     fit: BoxFit.cover,
-                    "${Constants.imagePath}${snapshot.data[itemIndex].posterPath}"),
+                    "${Constants.imagePath}${snapshot.data[itemIndex].backdropPath}"),
               ),
             ),
           );

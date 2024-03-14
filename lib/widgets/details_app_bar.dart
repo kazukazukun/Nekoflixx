@@ -26,7 +26,7 @@ class DetailsAppBar extends StatelessWidget {
             bottomRight: Radius.circular(24),
           ),
           child: Image.network(
-            "${Constants.imagePath}${media.posterPath}",
+            "${Constants.imagePath}${media.backdropPath}",
             filterQuality: FilterQuality.high,
             fit: BoxFit.cover,
           ),

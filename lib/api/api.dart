@@ -2,8 +2,11 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:nekoflixx/constants.dart';
+import 'package:nekoflixx/models/actor.dart';
 import 'package:nekoflixx/models/genre.dart';
 import 'package:nekoflixx/models/media_entity.dart';
+import 'package:nekoflixx/models/movie.dart';
+import 'package:nekoflixx/models/tv.dart';
 
 class API {
   static const String _baseUrl = "https://api.themoviedb.org/3";
@@ -28,6 +31,39 @@ class API {
     if (response.statusCode == 200) {
       final decodedData = jsonDecode(response.body)["genres"] as List;
       return decodedData.map((genres) => Genre.fromJson(genres)).toList();
+    } else {
+      throw Exception("Failed to load media");
+    }
+  }
+
+  Future<Actor> _fetchActorDetails(String endPoint, String ending) async {
+    final response = await http
+        .get(Uri.parse("$_baseUrl/$endPoint?api_key=$_apiKey$ending"));
+    if (response.statusCode == 200) {
+      final decodedData = jsonDecode(response.body);
+      return decodedData.map((genres) => Actor.fromJson(genres));
+    } else {
+      throw Exception("Failed to load media");
+    }
+  }
+
+  Future<Movie> _fetchMovieDetails(String endPoint, String ending) async {
+    final response = await http
+        .get(Uri.parse("$_baseUrl/$endPoint?api_key=$_apiKey$ending"));
+    if (response.statusCode == 200) {
+      final decodedData = jsonDecode(response.body);
+      return decodedData.map((genres) => Movie.fromJson(genres));
+    } else {
+      throw Exception("Failed to load media");
+    }
+  }
+
+  Future<TV> _fetchTvDetails(String endPoint, String ending) async {
+    final response = await http
+        .get(Uri.parse("$_baseUrl/$endPoint?api_key=$_apiKey$ending"));
+    if (response.statusCode == 200) {
+      final decodedData = jsonDecode(response.body);
+      return decodedData.map((genres) => TV.fromJson(genres));
     } else {
       throw Exception("Failed to load media");
     }
@@ -100,5 +136,17 @@ class API {
 
   Future<List<MediaEntity>> _getTvsWithAllGenres() async {
     return _fetchMedia("/discover/tv", "&sort_by=popularity.desc");
+  }
+
+  Future<Actor> getActorDetails(int id) async {
+    return _fetchActorDetails("person/$id", "");
+  }
+
+  Future<Movie> getMovieDetails(int id) async {
+    return _fetchMovieDetails("movie/$id", "");
+  }
+
+  Future<TV> getTvDetails(int id) async {
+    return _fetchTvDetails("tv/$id", "");
   }
 }

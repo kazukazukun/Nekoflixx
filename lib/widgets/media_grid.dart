@@ -33,7 +33,7 @@ class MediaGrid extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: Image.network(
-                "${Constants.imagePath}${mediaEntity.posterPath}",
+                "${Constants.imagePath}${mediaEntity.backdropPath}",
                 filterQuality: FilterQuality.high,
                 fit: BoxFit.cover,
               ),

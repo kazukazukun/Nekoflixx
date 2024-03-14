@@ -11,14 +11,11 @@ class MediaEntity {
   });
 
   factory MediaEntity.fromJson(Map<String, dynamic> json) {
-    // Extracting genre ids list from JSON
-    List<dynamic> genreIdsJson = json["genre_ids"] ?? [];
-
-    // Converting genre ids to integers
-    List<int> genreIds = genreIdsJson.map((id) => id as int).toList();
-
     return MediaEntity(
-      backdropPath: json["backdrop_path"] ?? json["profile_path"] ?? "",
+      backdropPath: json["poster_path"] ??
+          json["profile_path"] ??
+          json["backdrop_path"] ??
+          "",
       id: json["id"] ?? -1,
       mediaType: json["media_type"] ?? "",
     );
