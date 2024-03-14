@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:nekoflixx/colors.dart';
 import 'package:nekoflixx/constants.dart';
-import 'package:nekoflixx/screens/home_screen.dart';
 import 'package:nekoflixx/screens/login_screen.dart';
 import 'package:nekoflixx/widgets/nekoflixx_app_bar.dart';
 
@@ -58,7 +57,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
       Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const HomeScreen()));
+          MaterialPageRoute(builder: (context) => const LoginScreen()));
     } catch (error) {
       setState(() {
         _emailErrorText = error

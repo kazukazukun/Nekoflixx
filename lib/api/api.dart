@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:nekoflixx/constants.dart';
+import 'package:nekoflixx/models/genre.dart';
 import 'package:nekoflixx/models/media_entity.dart';
 
 class API {
@@ -16,6 +17,17 @@ class API {
       return decodedData
           .map((mediaEntity) => MediaEntity.fromJson(mediaEntity))
           .toList();
+    } else {
+      throw Exception("Failed to load media");
+    }
+  }
+
+  Future<List<Genre>> _fetchGenres(String endPoint, String ending) async {
+    final response = await http
+        .get(Uri.parse("$_baseUrl/$endPoint?api_key=$_apiKey$ending"));
+    if (response.statusCode == 200) {
+      final decodedData = jsonDecode(response.body)["genres"] as List;
+      return decodedData.map((genres) => Genre.fromJson(genres)).toList();
     } else {
       throw Exception("Failed to load media");
     }
@@ -40,5 +52,39 @@ class API {
 
   Future<List<MediaEntity>> getSearchedList(String query) async {
     return _fetchMedia("search/multi", "&query=$query");
+  }
+
+  Future<List<MediaEntity>> getSimilarMovies(int movieID) async {
+    return _fetchMedia("movie/$movieID/similar", "");
+  }
+
+  Future<List<MediaEntity>> getMovieByID(int movieID) async {
+    return _fetchMedia("movie/$movieID", "");
+  }
+
+  Future<List<Genre>> getMovieGenres() async {
+    return _fetchGenres("genre/movie/list", "");
+  }
+
+  Future<List<Genre>> getTvGenres() async {
+    return _fetchGenres("genre/tv/list", "");
+  }
+
+  Future<List<MediaEntity>> getMoviesByGenre(int genreID) async {
+    return _fetchMedia(
+        "/discover/movie", "&with_genres=$genreID&sort_by=popularity.desc");
+  }
+
+  Future<List<MediaEntity>> getTvsByGenre(int genreID) async {
+    return _fetchMedia(
+        "/discover/tv", "&with_genres=$genreID&sort_by=popularity.desc");
+  }
+
+  Future<List<MediaEntity>> getMoviesWithAllGenres() async {
+    return _fetchMedia("/discover/movie", "&sort_by=popularity.desc");
+  }
+
+  Future<List<MediaEntity>> getTvsWithAllGenres() async {
+    return _fetchMedia("/discover/tv", "&sort_by=popularity.desc");
   }
 }
