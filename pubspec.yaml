@@ -22,6 +22,7 @@ dependencies:
   cloud_firestore: ^4.15.8
   animated_splash_screen: ^1.3.0
   video_player: ^2.8.3
+  speech_to_text: ^6.6.0
 
 dev_dependencies:
   flutter_test:
