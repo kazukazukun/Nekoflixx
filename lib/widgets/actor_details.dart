@@ -4,6 +4,7 @@ import 'package:nekoflixx/models/actor.dart';
 import 'package:nekoflixx/widgets/details_app_bar.dart';
 import 'package:nekoflixx/widgets/tag.dart';
 
+//Shows actor details
 class ActorDetails extends StatefulWidget {
   final Actor actor;
 

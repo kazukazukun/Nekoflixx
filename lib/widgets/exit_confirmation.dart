@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// Exit confirmation button
 class ExitConfirmation extends StatelessWidget {
   const ExitConfirmation({
     super.key,

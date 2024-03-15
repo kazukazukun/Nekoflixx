@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nekoflixx/colors.dart';
 import 'package:nekoflixx/constants.dart';
 
+// Appbar for details screen
 class DetailsAppBar extends StatelessWidget {
   const DetailsAppBar({
     super.key,

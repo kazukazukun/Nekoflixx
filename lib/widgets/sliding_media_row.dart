@@ -4,6 +4,7 @@ import 'package:nekoflixx/screens/network_failure_screen.dart';
 import 'package:nekoflixx/widgets/moving_slider.dart';
 import 'package:nekoflixx/widgets/static_slider.dart';
 
+//Media row, which calls either slidng meida row ot static media row
 class SlidingMediaRow extends StatelessWidget {
   const SlidingMediaRow({
     super.key,

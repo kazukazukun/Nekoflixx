@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+// Text widget for topics
 class TopicText extends StatelessWidget {
   final String txt;
   const TopicText({super.key, required this.txt});

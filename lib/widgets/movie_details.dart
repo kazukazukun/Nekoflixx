@@ -6,6 +6,7 @@ import 'package:nekoflixx/widgets/details_app_bar.dart';
 import 'package:nekoflixx/widgets/tag.dart';
 import 'package:provider/provider.dart';
 
+// Shows movie details
 class MovieDetails extends StatefulWidget {
   final Movie movie;
 

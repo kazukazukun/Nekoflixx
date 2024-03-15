@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+// Tagg to show details in details screen
 class Tag extends StatelessWidget {
   const Tag({
     Key? key,

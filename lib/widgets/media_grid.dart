@@ -3,6 +3,7 @@ import 'package:nekoflixx/constants.dart';
 import 'package:nekoflixx/models/media_entity.dart';
 import 'package:nekoflixx/screens/details_screen.dart';
 
+// A grid to show media
 class MediaGrid extends StatelessWidget {
   final List<MediaEntity> mediaEntityList;
 

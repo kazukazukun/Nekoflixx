@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:nekoflixx/constants.dart';
 import 'package:nekoflixx/screens/details_screen.dart';
 
+// Shows media in a slidable list view in a row
 class StaticSlider extends StatelessWidget {
   const StaticSlider({
     super.key,

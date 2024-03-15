@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nekoflixx/constants.dart';
 
+//App bar for the app
 class NekoflixxAppBar extends StatelessWidget implements PreferredSizeWidget {
   const NekoflixxAppBar({Key? key}) : super(key: key);
 

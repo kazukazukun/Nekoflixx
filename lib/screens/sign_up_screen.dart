@@ -22,11 +22,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
   String? _passwordError;
   String? _emailErrorText;
 
+  // Method to handle the sign-up process
   Future<void> _signUp() async {
     String email = _emailController.text.trim();
     String password = _passwordController.text.trim();
     String confirmPassword = _confirmPasswordController.text.trim();
 
+    // Validate email, password, and confirmation password
     if (email.isEmpty ||
         password.isEmpty ||
         password != confirmPassword ||
@@ -54,14 +56,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
     }
 
     try {
+      // Create user with email and password
       await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
+      // Navigate to the login screen after successful sign-up
       Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => const LoginScreen()));
     } catch (error) {
       setState(() {
-        _emailErrorText = error
-            .toString(); // Consider parsing the error message for user-friendly text
+        _emailErrorText = error.toString(); // Parse error message for better UI
       });
     }
   }
@@ -69,6 +72,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     var credentials = [
+      // Email input field
       TextField(
         controller: _emailController,
         onChanged: (_) => setState(() => _emailErrorText = null),
@@ -78,6 +82,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ),
       ),
       const SizedBox(height: Constants.signUpAndInPageSpacing),
+      // Password input field
       TextField(
         controller: _passwordController,
         onChanged: (_) => setState(() => _passwordError = null),
@@ -88,6 +93,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ),
       ),
       const SizedBox(height: Constants.signUpAndInPageSpacing),
+      // Confirm password input field
       TextField(
         controller: _confirmPasswordController,
         onChanged: (_) => setState(() => _confirmationPwErrorText = null),
@@ -98,6 +104,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ),
       ),
       const SizedBox(height: Constants.signUpAndInPageSpacing),
+      // Sign-up button
       ElevatedButton(
         onPressed: _signUp,
         style: ElevatedButton.styleFrom(
@@ -123,6 +130,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             const SizedBox(
               height: Constants.signUpAndInPageSpacing,
             ),
+            // Link to login screen
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -132,7 +140,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    // Action for "Login"
+                    // Navigate to the login screen
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) => const LoginScreen(),

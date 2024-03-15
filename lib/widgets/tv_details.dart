@@ -6,6 +6,7 @@ import 'package:nekoflixx/widgets/details_app_bar.dart';
 import 'package:nekoflixx/widgets/tag.dart';
 import 'package:provider/provider.dart';
 
+// Shows tv details
 class TvDetails extends StatefulWidget {
   final TV tv;
 
