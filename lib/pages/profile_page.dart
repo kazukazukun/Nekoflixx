@@ -14,22 +14,33 @@ class ProfilePage extends StatelessWidget {
         future: _firestoreService.getUsername(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
           if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           }
-          return Column(
+          return const Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  'Username: ${snapshot.data}',
-                  style: Theme.of(context).textTheme.headline6,
-                ),
-              ),
               Expanded(
-                child: Watchlist(), // Your watchlist widget
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Placeholder for TopicText widget
+                    // Replace this with your implementation
+                    Text(
+                      "Watchlist",
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 16,
+                    ),
+                    // Your watchlist widget
+                    Watchlist(), // Replace this with your watchlist widget
+                  ],
+                ),
               ),
             ],
           );
