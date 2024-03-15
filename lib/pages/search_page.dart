@@ -31,11 +31,18 @@ class _SearchPageState extends State<SearchPage> {
     if (query.isNotEmpty) {
       try {
         final searchResults = await API().getSearchedList(query);
+        final movieSearchByActorResults = await API().getMoviesByActor(query);
+        final tvSearchByActorResults = await API().geTvByActor(query);
         setState(() {
           movieResults =
               searchResults.where((item) => item.mediaType == "movie").toList();
+          movieResults.addAll(movieSearchByActorResults
+              .where((item) => item.mediaType == "movie")
+              .toList());
           tvSeriesResults =
               searchResults.where((item) => item.mediaType == "tv").toList();
+          tvSeriesResults.addAll(
+              tvSearchByActorResults.where((item) => item.mediaType == "tv"));
           actorResults = searchResults
               .where((item) => item.mediaType == "person")
               .toList();

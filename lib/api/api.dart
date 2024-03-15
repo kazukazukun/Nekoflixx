@@ -26,10 +26,29 @@ class API {
           media.mediaType = mediaType;
         }
       }
-
       return mediaList;
     } else {
-      throw Exception("Failed to load media");
+      return [];
+    }
+  }
+
+  Future<List<MediaEntity>> _fetchCastMedia(
+      String endPoint, String ending, String mediaType) async {
+    final response = await http
+        .get(Uri.parse("$_baseUrl/$endPoint?api_key=$_apiKey$ending"));
+    if (response.statusCode == 200) {
+      final decodedData = jsonDecode(response.body)["cast"] as List;
+      List<MediaEntity> mediaList = decodedData
+          .map((mediaEntity) => MediaEntity.fromJson(mediaEntity))
+          .toList();
+      if (mediaType.isNotEmpty) {
+        for (var media in mediaList) {
+          media.mediaType = mediaType;
+        }
+      }
+      return mediaList;
+    } else {
+      return [];
     }
   }
 
@@ -40,7 +59,7 @@ class API {
       final decodedData = jsonDecode(response.body)["genres"] as List;
       return decodedData.map((genres) => Genre.fromJson(genres)).toList();
     } else {
-      throw Exception("Failed to load media");
+      return [];
     }
   }
 
@@ -58,9 +77,11 @@ class API {
   Future<Movie> _fetchMovieDetails(String endPoint, String ending) async {
     final response = await http
         .get(Uri.parse("$_baseUrl/$endPoint?api_key=$_apiKey$ending"));
+
     if (response.statusCode == 200) {
       final decodedData = jsonDecode(response.body);
-      return Movie.fromJson(decodedData); // Changed line
+      print("Decoded movie data: $decodedData"); // Print statement added
+      return Movie.fromJson(decodedData);
     } else {
       throw Exception("Failed to load movie details");
     }
@@ -160,7 +181,27 @@ class API {
     return _fetchTvDetails("tv/$id", "");
   }
 
-  Future<List<MediaEntity>> getSearchedMediaByActor(String query) async {
-    return _fetchMedia("/search/person", "&query=$query", "");
+  Future<List<MediaEntity>> getMoviesByActor(String query) async {
+    String? actorId = await _fetchActorIdByName(query);
+    return _fetchCastMedia("/person/$actorId/movie_credits", "", "movie");
+  }
+
+  Future<List<MediaEntity>> geTvByActor(String query) async {
+    String? actorId = await _fetchActorIdByName(query);
+    return _fetchCastMedia("/person/$actorId/tv_credits", "", "tv");
+  }
+
+  Future<String?> _fetchActorIdByName(String query) async {
+    final response = await http.get(
+        Uri.parse('$_baseUrl/search/person?api_key=$_apiKey&query=$query'));
+    if (response.statusCode == 200) {
+      final results = json.decode(response.body)['results'];
+      if (results.isNotEmpty) {
+        // Return the ID as a String
+        return results[0]['id'].toString();
+      }
+    }
+    // Return null if there are no results or if the response is not successful
+    return null;
   }
 }
