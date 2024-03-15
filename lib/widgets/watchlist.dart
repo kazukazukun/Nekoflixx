@@ -8,10 +8,10 @@ class Watchlist extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     FirestoreService firestoreService = FirestoreService();
-    
+
     return SlidingMediaRow(
       mediaEntityList: firestoreService.getWatchlistMediaEntities(),
-      isMoving: false, // Assuming you want a static slider for the watchlist
+      isMoving: false,
     );
   }
 }

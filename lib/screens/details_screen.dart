@@ -5,6 +5,7 @@ import 'package:nekoflixx/models/actor.dart';
 import 'package:nekoflixx/models/media_entity.dart';
 import 'package:nekoflixx/models/movie.dart';
 import 'package:nekoflixx/models/tv.dart';
+import 'package:nekoflixx/screens/network_failure_screen.dart';
 import 'package:nekoflixx/widgets/actor_details.dart';
 import 'package:nekoflixx/widgets/movie_details.dart';
 import 'package:nekoflixx/widgets/tv_details.dart';
@@ -48,8 +49,10 @@ class _DetailsScreenState extends State<DetailsScreen> {
         _isInWatchlist = isInWatchlist;
       });
     } catch (e) {
-      // Handle the error appropriately
-      print(e); // Consider logging the error or showing a user-friendly message
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => const NetworkFailureScreen()));
     }
   }
 
@@ -64,8 +67,10 @@ class _DetailsScreenState extends State<DetailsScreen> {
       await _firestoreService.toggleWatchlistStatus(widget.mediaEntity);
       await _checkWatchlistStatus(); // Refresh status after toggling
     } catch (e) {
-      // Handle the error appropriately
-      print(e); // Consider logging the error or showing a user-friendly message
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => const NetworkFailureScreen()));
     }
 
     setState(() {

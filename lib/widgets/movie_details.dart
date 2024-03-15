@@ -25,9 +25,6 @@ class _MovieDetailsState extends State<MovieDetails> {
       appBar: AppBar(
         title: Text(widget.movie.title),
         leading: null, // Disable default back button
-        actions: [
-          // Placeholder for watchlist button or other actions
-        ],
       ),
       body: CustomScrollView(
         slivers: [
@@ -85,15 +82,12 @@ class _MovieDetailsState extends State<MovieDetails> {
                           txt: "Rating",
                           content:
                               "${widget.movie.voteAverage.toStringAsFixed(1)}/10"),
-                      // You can add more tags for other details if needed
                     ],
                   ),
-                  // Here you can add more information about the movie using Text widgets
                 ],
               ),
             ),
           ),
-          // Add more slivers if needed
         ],
       ),
     );

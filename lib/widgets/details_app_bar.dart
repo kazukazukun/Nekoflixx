@@ -27,7 +27,7 @@ class DetailsAppBar extends StatelessWidget {
           child: Image.network(
             "${Constants.imagePath}$backdropPath",
             filterQuality: FilterQuality.high,
-            fit: BoxFit.cover,
+            fit: BoxFit.contain,
           ),
         ),
       ),

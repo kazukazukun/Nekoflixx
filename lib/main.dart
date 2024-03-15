@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:nekoflixx/firebase/firebase_options.dart';
 import 'package:nekoflixx/models/genre_provider.dart';
 import 'package:nekoflixx/screens/splash_screen.dart';
-import 'package:provider/provider.dart'; // Your main app widget
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding

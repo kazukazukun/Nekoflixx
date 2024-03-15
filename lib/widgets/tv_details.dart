@@ -16,7 +16,6 @@ class TvDetails extends StatefulWidget {
 }
 
 class _TvDetailsState extends State<TvDetails> {
-
   @override
   Widget build(BuildContext context) {
     // Fetch the GenreProvider at the beginning of the build method
@@ -26,9 +25,6 @@ class _TvDetailsState extends State<TvDetails> {
       appBar: AppBar(
         title: Text(widget.tv.title),
         leading: null, // Disable default back button
-        actions: [
-          // Placeholder for watchlist button or other actions
-        ],
       ),
       body: CustomScrollView(
         slivers: [
@@ -84,15 +80,12 @@ class _TvDetailsState extends State<TvDetails> {
                           txt: "Rating",
                           content:
                               "${widget.tv.voteAverage.toStringAsFixed(1)}/10"),
-                      // You can add more tags for other details if needed
                     ],
                   ),
-                  // Here you can add more information about the movie using Text widgets
                 ],
               ),
             ),
           ),
-          // Add more slivers if needed
         ],
       ),
     );

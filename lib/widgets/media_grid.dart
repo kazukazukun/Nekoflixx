@@ -13,10 +13,10 @@ class MediaGrid extends StatelessWidget {
     return GridView.builder(
       itemCount: mediaEntityList.length,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2, // Adjust the cross axis count as needed
+        crossAxisCount: 2,
         mainAxisSpacing: 8.0,
         crossAxisSpacing: 8.0,
-        childAspectRatio: 0.65, // Adjust the aspect ratio as needed
+        childAspectRatio: 0.65,
       ),
       itemBuilder: (context, index) {
         final mediaEntity = mediaEntityList[index];

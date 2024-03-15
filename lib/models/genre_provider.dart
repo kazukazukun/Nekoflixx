@@ -22,7 +22,6 @@ class GenreProvider extends ChangeNotifier {
   }
 
   String getGenreFromId(int genreId) {
-    print("Searching for genreId: $genreId");
     String genreName = 'Unknown';
     for (var genre in _movieGenres) {
       if (genre.genreId == genreId) {
@@ -38,7 +37,6 @@ class GenreProvider extends ChangeNotifier {
         }
       }
     }
-    print("Found genreName: $genreName for genreId: $genreId");
     return genreName;
   }
 }

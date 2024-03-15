@@ -28,7 +28,7 @@ class _NekoflixxState extends State<Nekoflixx> {
     setState(() {
       _initialScreen = isLoggedIn ? const HomeScreen() : const LoginScreen();
     });
-     Provider.of<GenreProvider>(context, listen: false).fetchGenres();
+    Provider.of<GenreProvider>(context, listen: false).fetchGenres();
   }
 
   @override

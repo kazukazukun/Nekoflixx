@@ -68,7 +68,7 @@ class API {
         .get(Uri.parse("$_baseUrl/$endPoint?api_key=$_apiKey$ending"));
     if (response.statusCode == 200) {
       final decodedData = jsonDecode(response.body);
-      return Actor.fromJson(decodedData); // Changed line
+      return Actor.fromJson(decodedData);
     } else {
       throw Exception("Failed to load actor details");
     }
@@ -80,7 +80,6 @@ class API {
 
     if (response.statusCode == 200) {
       final decodedData = jsonDecode(response.body);
-      print("Decoded movie data: $decodedData"); // Print statement added
       return Movie.fromJson(decodedData);
     } else {
       throw Exception("Failed to load movie details");
@@ -92,7 +91,7 @@ class API {
         .get(Uri.parse("$_baseUrl/$endPoint?api_key=$_apiKey$ending"));
     if (response.statusCode == 200) {
       final decodedData = jsonDecode(response.body);
-      return TV.fromJson(decodedData); // Changed line
+      return TV.fromJson(decodedData);
     } else {
       throw Exception("Failed to load TV details");
     }

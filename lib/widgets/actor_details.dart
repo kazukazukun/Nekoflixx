@@ -14,7 +14,7 @@ class ActorDetails extends StatefulWidget {
 }
 
 class _ActorDetailsState extends State<ActorDetails> {
-  bool _isLoading = false; // Add this variable to manage loading state
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -22,9 +22,6 @@ class _ActorDetailsState extends State<ActorDetails> {
       appBar: AppBar(
         title: Text(widget.actor.name),
         leading: null, // Disable default back button
-        actions: const [
-          // _watchlistButton(), // You need to implement this method separately
-        ],
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -65,7 +62,6 @@ class _ActorDetailsState extends State<ActorDetails> {
                             ),
                           ],
                         ),
-                        // Optional: Add additional actor details or actions here
                       ],
                     ),
                   ),
