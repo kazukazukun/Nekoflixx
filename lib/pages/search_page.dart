@@ -14,6 +14,13 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   final TextEditingController _textEditingController = TextEditingController();
+  final List<String> _sortOptions = [
+    'popularity.asc',
+    'popularity.desc',
+    'title.asc',
+    'title.desc',
+  ];
+  String _currentSortOption = 'popularity.desc';
 
   List<MediaEntity> movieResults = [];
   List<MediaEntity> tvSeriesResults = [];
@@ -32,6 +39,9 @@ class _SearchPageState extends State<SearchPage> {
           actorResults = searchResults
               .where((item) => item.mediaType == "person")
               .toList();
+          sortSearchResults(movieResults);
+          sortSearchResults(tvSeriesResults);
+          sortSearchResults(actorResults);
         });
       } catch (e) {
         // Handle error
@@ -59,6 +69,23 @@ class _SearchPageState extends State<SearchPage> {
     super.dispose();
   }
 
+  void sortSearchResults(List<MediaEntity> results) {
+    switch (_currentSortOption) {
+      case 'popularity.asc':
+        results.sort((a, b) => a.popularity.compareTo(b.popularity));
+        break;
+      case 'popularity.desc':
+        results.sort((a, b) => b.popularity.compareTo(a.popularity));
+        break;
+      case 'title.asc':
+        results.sort((a, b) => a.name.compareTo(b.name));
+        break;
+      case 'title.desc':
+        results.sort((a, b) => b.name.compareTo(a.name));
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -72,29 +99,40 @@ class _SearchPageState extends State<SearchPage> {
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                decoration: BoxDecoration(
-                  color: Colors.grey[800],
-                  borderRadius: BorderRadius.circular(30.0),
-                ),
-                child: Row(
-                  children: [
-                    const Icon(Icons.search, color: Colors.white),
-                    const SizedBox(width: 8.0),
-                    Expanded(
-                      child: TextField(
-                        controller: _textEditingController,
-                        decoration: const InputDecoration(
-                          hintText: 'Search',
-                          hintStyle: TextStyle(color: Colors.white),
-                          border: InputBorder.none,
-                        ),
-                        style: const TextStyle(color: Colors.white),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[800],
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
+                      child: Row(
+                        children: [
+                          const Icon(Icons.search, color: Colors.white),
+                          const SizedBox(width: 8.0),
+                          Expanded(
+                            child: TextField(
+                              controller: _textEditingController,
+                              decoration: const InputDecoration(
+                                hintText: 'Search',
+                                hintStyle: TextStyle(color: Colors.white),
+                                border: InputBorder.none,
+                              ),
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.sort),
+                    onPressed: () => _showSortOptions(context),
+                    color: Colors.white,
+                  ),
+                ],
               ),
             ),
             const SizedBox(height: Constants.searchPageSpacing),
@@ -120,6 +158,30 @@ class _SearchPageState extends State<SearchPage> {
           ],
         ),
       ),
+    );
+  }
+
+  void _showSortOptions(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return SafeArea(
+          child: Wrap(
+            children: _sortOptions.map((String option) {
+              return ListTile(
+                title: Text(option.replaceAll('.', ' ').toUpperCase()),
+                onTap: () {
+                  Navigator.pop(context);
+                  setState(() {
+                    _currentSortOption = option;
+                    onSearchTextChanged();
+                  });
+                },
+              );
+            }).toList(),
+          ),
+        );
+      },
     );
   }
 }
