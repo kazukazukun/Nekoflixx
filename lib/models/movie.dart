@@ -1,19 +1,48 @@
+/// A class representing a movie.
 class Movie {
+  /// The backdrop path of the movie.
   String backdropPath = "";
+
+  /// The ID of the movie.
   int id = 0;
+
+  /// The title of the movie.
   String title = "";
+
+  /// The original language of the movie.
   String originalLanguage = "";
+
+  /// The original name of the movie.
   String originalName = "";
+
+  /// An overview of the movie.
   String overview = "";
+
+  /// The popularity of the movie.
   double popularity = 0;
+
+  /// The poster path of the movie.
   String posterPath = "";
+
+  /// The type of media (e.g., movie, TV show).
   String mediaType = "";
+
+  /// The genre IDs associated with the movie.
   List<int> genreIds = [];
+
+  /// The release date of the movie.
   String releaseDate = "";
+
+  /// A flag indicating whether the movie has video content.
   bool video = false;
+
+  /// The average vote rating of the movie.
   double voteAverage = 0;
+
+  /// The total number of votes received by the movie.
   int voteCount = 0;
 
+  /// Constructor for creating a Movie instance.
   Movie({
     required this.backdropPath,
     required this.id,
@@ -30,6 +59,7 @@ class Movie {
     required this.voteCount,
   });
 
+  /// Factory method to create a Movie instance from JSON data.
   factory Movie.fromJson(Map<String, dynamic> json) {
     // Extracting genre objects from JSON
     List<dynamic> genresJson = json['genres'] ?? [];
