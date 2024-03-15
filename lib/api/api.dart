@@ -159,4 +159,8 @@ class API {
   Future<TV> getTvDetails(int id) async {
     return _fetchTvDetails("tv/$id", "");
   }
+
+  Future<List<MediaEntity>> getSearchedMediaByActor(String query) async {
+    return _fetchMedia("/search/person", "&query=$query", "");
+  }
 }
