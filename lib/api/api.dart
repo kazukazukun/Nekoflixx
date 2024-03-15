@@ -12,6 +12,7 @@ class API {
   static const String _baseUrl = "https://api.themoviedb.org/3";
   static const String _apiKey = Constants.apiKey;
 
+  // Fetch media entities from the API
   Future<List<MediaEntity>> _fetchMedia(
       String endPoint, String ending, String mediaType) async {
     final response = await http
@@ -32,6 +33,7 @@ class API {
     }
   }
 
+  // Fetch media entities for cast from the API
   Future<List<MediaEntity>> _fetchCastMedia(
       String endPoint, String ending, String mediaType) async {
     final response = await http
@@ -52,6 +54,7 @@ class API {
     }
   }
 
+  // Fetch genres from the API
   Future<List<Genre>> _fetchGenres(String endPoint, String ending) async {
     final response = await http
         .get(Uri.parse("$_baseUrl/$endPoint?api_key=$_apiKey$ending"));
@@ -63,6 +66,7 @@ class API {
     }
   }
 
+  // Fetch actor details from the API
   Future<Actor> _fetchActorDetails(String endPoint, String ending) async {
     final response = await http
         .get(Uri.parse("$_baseUrl/$endPoint?api_key=$_apiKey$ending"));
@@ -74,6 +78,7 @@ class API {
     }
   }
 
+  // Fetch movie details from the API
   Future<Movie> _fetchMovieDetails(String endPoint, String ending) async {
     final response = await http
         .get(Uri.parse("$_baseUrl/$endPoint?api_key=$_apiKey$ending"));
@@ -86,6 +91,7 @@ class API {
     }
   }
 
+  // Fetch TV show details from the API
   Future<TV> _fetchTvDetails(String endPoint, String ending) async {
     final response = await http
         .get(Uri.parse("$_baseUrl/$endPoint?api_key=$_apiKey$ending"));
@@ -97,14 +103,17 @@ class API {
     }
   }
 
+  // Get the list of now playing movies
   Future<List<MediaEntity>> getNowPlayingMovies() async {
     return _fetchMedia("movie/now_playing", "", "movie");
   }
 
+  // Get the list of TV shows airing tonight
   Future<List<MediaEntity>> getTvTonights() async {
     return _fetchMedia("tv/airing_today", "", "tv");
   }
 
+  // Get the list of best movies of the year
   Future<List<MediaEntity>> getBestMoviesThisYear() async {
     return _fetchMedia(
         "discover/movie",
@@ -112,38 +121,47 @@ class API {
         "movie");
   }
 
+  // Get the list of top grossing movies
   Future<List<MediaEntity>> getTopGrossingMovies() async {
     return _fetchMedia("discover/movie", "&sort_by=revenue.desc", "movie");
   }
 
+  // Search for media entities based on query
   Future<List<MediaEntity>> getSearchedList(String query) async {
     return _fetchMedia("search/multi", "&query=$query", "");
   }
 
+  // Get similar movies based on movie ID
   Future<List<MediaEntity>> getSimilarMovies(int movieID) async {
     return _fetchMedia("movie/$movieID/similar", "", "movie");
   }
 
+  // Get similar TV shows based on TV show ID
   Future<List<MediaEntity>> getSimilarTvs(int tvID) async {
     return _fetchMedia("tv/$tvID/similar", "", "tv");
   }
 
+  // Get movie details based on movie ID
   Future<List<MediaEntity>> getMovieByID(int movieID) async {
     return _fetchMedia("movie/$movieID", "", "movie");
   }
 
+  // Get TV show details based on TV show ID
   Future<List<MediaEntity>> getTvByID(int tvID) async {
     return _fetchMedia("tv/$tvID", "", "tv");
   }
 
+  // Get movie genres
   Future<List<Genre>> getMovieGenres() async {
     return _fetchGenres("genre/movie/list", "");
   }
 
+  // Get TV show genres
   Future<List<Genre>> getTvGenres() async {
     return _fetchGenres("genre/tv/list", "");
   }
 
+  // Get movies by genre ID
   Future<List<MediaEntity>> getMoviesByGenre(int genreID) async {
     if (genreID == -1) {
       return _getMoviesWithAllGenres();
@@ -152,6 +170,7 @@ class API {
         "&with_genres=$genreID&sort_by=popularity.desc", "movie");
   }
 
+  // Get TV shows by genre ID
   Future<List<MediaEntity>> getTvsByGenre(int genreID) async {
     if (genreID == -1) {
       return _getTvsWithAllGenres();
@@ -160,36 +179,44 @@ class API {
         "/discover/tv", "&with_genres=$genreID&sort_by=popularity.desc", "tv");
   }
 
+  // Get movies with all genres
   Future<List<MediaEntity>> _getMoviesWithAllGenres() async {
     return _fetchMedia("/discover/movie", "&sort_by=popularity.desc", "movie");
   }
 
+  // Get TV shows with all genres
   Future<List<MediaEntity>> _getTvsWithAllGenres() async {
     return _fetchMedia("/discover/tv", "&sort_by=popularity.desc", "tv");
   }
 
+  // Get actor details by ID
   Future<Actor> getActorDetails(int id) async {
     return _fetchActorDetails("person/$id", "");
   }
 
+  // Get movie details by ID
   Future<Movie> getMovieDetails(int id) async {
     return _fetchMovieDetails("movie/$id", "");
   }
 
+  // Get TV show details by ID
   Future<TV> getTvDetails(int id) async {
     return _fetchTvDetails("tv/$id", "");
   }
 
+  // Get movies by actor's name
   Future<List<MediaEntity>> getMoviesByActor(String query) async {
     String? actorId = await _fetchActorIdByName(query);
     return _fetchCastMedia("/person/$actorId/movie_credits", "", "movie");
   }
 
+  // Get TV shows by actor's name
   Future<List<MediaEntity>> geTvByActor(String query) async {
     String? actorId = await _fetchActorIdByName(query);
     return _fetchCastMedia("/person/$actorId/tv_credits", "", "tv");
   }
 
+  // Fetch actor ID by name
   Future<String?> _fetchActorIdByName(String query) async {
     final response = await http.get(
         Uri.parse('$_baseUrl/search/person?api_key=$_apiKey&query=$query'));
