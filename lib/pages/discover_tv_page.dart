@@ -6,6 +6,7 @@ import 'package:nekoflixx/models/media_entity.dart';
 import 'package:nekoflixx/widgets/media_grid.dart';
 import 'package:provider/provider.dart';
 
+/// A page to discover TV shows.
 class DiscoverTvPage extends StatefulWidget {
   const DiscoverTvPage({Key? key}) : super(key: key);
 
@@ -20,6 +21,7 @@ class _DiscoverTvPage extends State<DiscoverTvPage> {
   @override
   void initState() {
     super.initState();
+    // Fetch TV shows by the default selected genre ID
     tvs = fetchTvsByGenre(_selectedGenreId);
   }
 
@@ -74,6 +76,7 @@ class _DiscoverTvPage extends State<DiscoverTvPage> {
     );
   }
 
+  /// Displays a bottom sheet with TV genres to choose from.
   void showGenreMenu(BuildContext context, List<Genre> movieGenres) {
     showModalBottomSheet(
       context: context,
@@ -98,19 +101,15 @@ class _DiscoverTvPage extends State<DiscoverTvPage> {
           },
         );
       },
-    ).then((selectedGenreId) {
-      if (selectedGenreId != null) {
-        // Handle selected genre
-        print('Selected genre ID: $selectedGenreId');
-      }
-    });
+    );
   }
 
+  /// Fetches TV shows by the provided genre ID.
   Future<List<MediaEntity>> fetchTvsByGenre(int genreId) async {
     try {
       return await API().getTvsByGenre(genreId);
     } catch (e) {
-      throw Exception('Failed to fetch movies: $e');
+      throw Exception('Failed to fetch TV shows: $e');
     }
   }
 }

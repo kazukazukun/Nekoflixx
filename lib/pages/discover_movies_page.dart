@@ -6,6 +6,7 @@ import 'package:nekoflixx/models/media_entity.dart';
 import 'package:nekoflixx/widgets/media_grid.dart';
 import 'package:provider/provider.dart';
 
+/// A StatefulWidget representing the page for discovering movies.
 class DiscoverMoviesPage extends StatefulWidget {
   const DiscoverMoviesPage({Key? key}) : super(key: key);
 
@@ -13,6 +14,7 @@ class DiscoverMoviesPage extends StatefulWidget {
   _DiscoverMoviesPageState createState() => _DiscoverMoviesPageState();
 }
 
+/// The state of the DiscoverMoviesPage.
 class _DiscoverMoviesPageState extends State<DiscoverMoviesPage> {
   int _selectedGenreId = -1; // Default selected genre ID
   late Future<List<MediaEntity>>? movies;
@@ -74,6 +76,7 @@ class _DiscoverMoviesPageState extends State<DiscoverMoviesPage> {
     );
   }
 
+  /// Displays a bottom sheet menu to choose a genre.
   void showGenreMenu(BuildContext context, List<Genre> movieGenres) {
     showModalBottomSheet(
       context: context,
@@ -98,14 +101,10 @@ class _DiscoverMoviesPageState extends State<DiscoverMoviesPage> {
           },
         );
       },
-    ).then((selectedGenreId) {
-      if (selectedGenreId != null) {
-        // Handle selected genre
-        print('Selected genre ID: $selectedGenreId');
-      }
-    });
+    );
   }
 
+  /// Fetches movies by genre from the API.
   Future<List<MediaEntity>> fetchMoviesByGenre(int genreId) async {
     try {
       return await API().getMoviesByGenre(genreId);

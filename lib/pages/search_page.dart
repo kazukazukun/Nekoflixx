@@ -26,6 +26,7 @@ class _SearchPageState extends State<SearchPage> {
   List<MediaEntity> tvSeriesResults = [];
   List<MediaEntity> actorResults = [];
 
+  // Method to fetch search results when text is changed in the search bar
   void onSearchTextChanged() async {
     final query = _textEditingController.text;
     if (query.isNotEmpty) {
@@ -76,6 +77,7 @@ class _SearchPageState extends State<SearchPage> {
     super.dispose();
   }
 
+  // Method to sort the search results based on the selected sorting option
   void sortSearchResults(List<MediaEntity> results) {
     switch (_currentSortOption) {
       case 'popularity.asc':
@@ -168,6 +170,7 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
+  // Method to display sorting options as a bottom sheet
   void _showSortOptions(BuildContext context) {
     showModalBottomSheet(
       context: context,

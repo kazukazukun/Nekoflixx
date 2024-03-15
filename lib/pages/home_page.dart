@@ -5,6 +5,7 @@ import 'package:nekoflixx/models/media_entity.dart';
 import 'package:nekoflixx/widgets/sliding_media_row.dart';
 import 'package:nekoflixx/widgets/topic_text.dart';
 
+/// Home page of the application displaying various categories of media.
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -21,6 +22,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    // Fetching data for various categories asynchronously when the page initializes
     nowPlayingMovies = API().getNowPlayingMovies();
     onTvTonights = API().getTvTonights();
     upComingMovies = API().getBestMoviesThisYear();
@@ -42,6 +44,7 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(
               height: Constants.spacingBetweenSliders,
             ),
+            // Sliding media row for displaying now playing movies
             SlidingMediaRow(
               mediaEntityList: nowPlayingMovies,
               isMoving: true,
@@ -53,6 +56,7 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(
               height: Constants.spacingBetweenSliders,
             ),
+            // Sliding media row for displaying TV shows airing tonight
             SlidingMediaRow(mediaEntityList: onTvTonights, isMoving: true),
             const SizedBox(
               height: Constants.spacingBetweenSliders,
@@ -61,6 +65,7 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(
               height: Constants.spacingBetweenSliders,
             ),
+            // Sliding media row for displaying best movies of the year
             SlidingMediaRow(mediaEntityList: upComingMovies, isMoving: true),
             const SizedBox(
               height: Constants.spacingBetweenSliders,
@@ -69,6 +74,7 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(
               height: Constants.spacingBetweenSliders,
             ),
+            // Sliding media row for displaying top grossing movies
             SlidingMediaRow(mediaEntityList: topGrossingMovies, isMoving: true),
             const SizedBox(
               height: Constants.spacingBetweenSliders,
