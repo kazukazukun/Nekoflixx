@@ -22,6 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  // Pages of home screen
   final List<Widget> _pages = [
     const HomePage(),
     const SearchPage(),

@@ -10,6 +10,7 @@ import 'package:nekoflixx/widgets/actor_details.dart';
 import 'package:nekoflixx/widgets/movie_details.dart';
 import 'package:nekoflixx/widgets/tv_details.dart';
 
+// Screen to show movie, tv and actor details
 class DetailsScreen extends StatefulWidget {
   const DetailsScreen({Key? key, required this.mediaEntity}) : super(key: key);
   final MediaEntity mediaEntity;
@@ -56,6 +57,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
     }
   }
 
+  //Adds to watchlist
   Future<void> _toggleWatchlistStatus() async {
     if (_isTogglingWatchlist) return; // Prevent multiple taps during operation
 

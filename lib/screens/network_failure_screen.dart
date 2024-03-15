@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nekoflixx/screens/home_screen.dart';
 
+// Screen shown when there's no internet
 class NetworkFailureScreen extends StatelessWidget {
   const NetworkFailureScreen({Key? key}) : super(key: key);
 

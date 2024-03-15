@@ -8,6 +8,7 @@ import 'package:nekoflixx/widgets/exit_confirmation.dart';
 import 'package:nekoflixx/widgets/nekoflixx_app_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+// Login Screen
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
@@ -22,20 +23,25 @@ class _LoginScreenState extends State<LoginScreen> {
   String? _emailErrorText;
   String? _passwordError;
 
+  // Method to handle the login process
   Future<void> _login() async {
     try {
+      // Sign in with email and password
       await _auth.signInWithEmailAndPassword(
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       );
 
+      // Store login state in shared preferences
       final prefs = await SharedPreferences.getInstance();
       await prefs.setBool('isLoggedIn', true);
 
+      // Navigate to the home screen
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => const HomeScreen()),
       );
     } catch (e) {
+      // Display error message in a snackbar
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(e.toString())),
       );
@@ -45,6 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     var credentials = [
+      // Email input field
       TextField(
         controller: _emailController,
         onChanged: (_) {
@@ -59,6 +66,7 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
       const SizedBox(height: Constants.signUpAndInPageSpacing),
+      // Password input field
       TextField(
         controller: _passwordController,
         onChanged: (_) {
@@ -75,7 +83,7 @@ class _LoginScreenState extends State<LoginScreen> {
     ];
     return WillPopScope(
       onWillPop: () async {
-        // Close the app when the back button is pressed
+        // Show exit confirmation dialog when back button is pressed
         return await showDialog(
           context: context,
           builder: (context) => const ExitConfirmation(),
@@ -95,6 +103,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               const SizedBox(height: Constants.signUpAndInPageSpacing),
+              // Login button
               ElevatedButton(
                 onPressed: _login,
                 style: ElevatedButton.styleFrom(
@@ -113,6 +122,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               const SizedBox(height: Constants.signUpAndInPageSpacing),
+              // Sign up link
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -124,7 +134,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      // Action for "Sign up now"
+                      // Navigate to the sign up screen
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) => const SignUpScreen(),
