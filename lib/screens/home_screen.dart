@@ -26,7 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
     const HomePage(),
     const SearchPage(),
     const DiscoverPage(),
-    const ProfilePage(),
+    ProfilePage(),
   ];
 
   @override

@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:nekoflixx/colors.dart';
 import 'package:nekoflixx/constants.dart';
-import 'package:nekoflixx/models/media_entity.dart';
 
 class DetailsAppBar extends StatelessWidget {
   const DetailsAppBar({
     super.key,
-    required this.media,
+    required this.backdropPath,
   });
 
-  final MediaEntity media;
+  final String backdropPath;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +25,7 @@ class DetailsAppBar extends StatelessWidget {
             bottomRight: Radius.circular(24),
           ),
           child: Image.network(
-            "${Constants.imagePath}${media.backdropPath}",
+            "${Constants.imagePath}$backdropPath",
             filterQuality: FilterQuality.high,
             fit: BoxFit.cover,
           ),

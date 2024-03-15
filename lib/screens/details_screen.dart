@@ -5,6 +5,9 @@ import 'package:nekoflixx/models/actor.dart';
 import 'package:nekoflixx/models/media_entity.dart';
 import 'package:nekoflixx/models/movie.dart';
 import 'package:nekoflixx/models/tv.dart';
+import 'package:nekoflixx/widgets/actor_details.dart';
+import 'package:nekoflixx/widgets/movie_details.dart';
+import 'package:nekoflixx/widgets/tv_details.dart';
 
 class DetailsScreen extends StatefulWidget {
   const DetailsScreen({Key? key, required this.mediaEntity}) : super(key: key);
@@ -17,17 +20,24 @@ class DetailsScreen extends StatefulWidget {
 class _DetailsScreenState extends State<DetailsScreen> {
   final FirestoreService _firestoreService = FirestoreService();
   bool _isInWatchlist = false;
-  bool _isLoading = true;
+  bool _isTogglingWatchlist = false;
+  late Future<void> _detailsFuture;
 
-  late Movie _movieDetails;
-  late TV _tvDetails;
-  late Actor _actorDetails;
+  Movie? _movieDetails;
+  TV? _tvDetails;
+  Actor? _actorDetails;
 
   @override
   void initState() {
     super.initState();
-    _checkWatchlistStatus();
-    _fetchMediaDetails();
+    _detailsFuture = _initializeDetailsScreen();
+  }
+
+  Future<void> _initializeDetailsScreen() async {
+    await Future.wait([
+      _fetchMediaDetails(),
+      _checkWatchlistStatus(),
+    ]);
   }
 
   Future<void> _checkWatchlistStatus() async {
@@ -36,67 +46,94 @@ class _DetailsScreenState extends State<DetailsScreen> {
           .isInWatchlist(widget.mediaEntity.id.toString());
       setState(() {
         _isInWatchlist = isInWatchlist;
-        _isLoading = false;
       });
     } catch (e) {
-      setState(() {
-        _isLoading = false;
-      });
       // Handle the error appropriately
+      print(e); // Consider logging the error or showing a user-friendly message
     }
   }
 
   Future<void> _toggleWatchlistStatus() async {
+    if (_isTogglingWatchlist) return; // Prevent multiple taps during operation
+
     setState(() {
-      _isLoading = true;
+      _isTogglingWatchlist = true;
     });
+
     try {
-      // Pass the current status to the method
       await _firestoreService.toggleWatchlistStatus(widget.mediaEntity);
-      _checkWatchlistStatus(); // Refresh status after toggling
+      await _checkWatchlistStatus(); // Refresh status after toggling
     } catch (e) {
       // Handle the error appropriately
-      setState(() {
-        _isLoading = false;
-      });
+      print(e); // Consider logging the error or showing a user-friendly message
     }
-  }
 
-  Widget _watchlistButton() {
-    return _isLoading
-        ? const CircularProgressIndicator()
-        : IconButton(
-            icon: _isInWatchlist
-                ? const Icon(Icons.check)
-                : const Icon(Icons.add),
-            onPressed: _toggleWatchlistStatus,
-            tooltip:
-                _isInWatchlist ? 'Remove from Watchlist' : 'Add to Watchlist',
-          );
+    setState(() {
+      _isTogglingWatchlist = false;
+    });
   }
 
   Future<void> _fetchMediaDetails() async {
-    try {
-      if (widget.mediaEntity.mediaType == 'movie') {
-        _movieDetails = await API().getMovieDetails(widget.mediaEntity.id);
-      } else if (widget.mediaEntity.mediaType == 'tv') {
-        _tvDetails = await API().getTvDetails(widget.mediaEntity.id);
-      } else if (widget.mediaEntity.mediaType == 'person') {
-        _actorDetails = await API().getActorDetails(widget.mediaEntity.id);
-      }
-      setState(() {
-        _isLoading = false;
-      });
-    } catch (e) {
-      // Handle error
-      setState(() {
-        _isLoading = false;
-      });
+    if (widget.mediaEntity.mediaType == 'movie') {
+      _movieDetails = await API().getMovieDetails(widget.mediaEntity.id);
+    } else if (widget.mediaEntity.mediaType == 'tv') {
+      _tvDetails = await API().getTvDetails(widget.mediaEntity.id);
+    } else if (widget.mediaEntity.mediaType == 'person') {
+      _actorDetails = await API().getActorDetails(widget.mediaEntity.id);
     }
+  }
+
+  Widget _watchlistButtonFAB() {
+    return FloatingActionButton(
+      onPressed: _isTogglingWatchlist ? null : _toggleWatchlistStatus,
+      backgroundColor: _isTogglingWatchlist ? Colors.grey : null,
+      child: _isTogglingWatchlist
+          ? CircularProgressIndicator(color: Colors.white)
+          : Icon(_isInWatchlist ? Icons.check : Icons.add),
+      tooltip: _isInWatchlist ? 'Remove from Watchlist' : 'Add to Watchlist',
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return FutureBuilder<void>(
+      future: _detailsFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        } else if (snapshot.hasError) {
+          return Scaffold(
+            body: Center(
+              child: Text('Error: ${snapshot.error}'),
+            ),
+          );
+        }
+
+        // Decide which content to show based on the media type and availability of details
+        Widget content;
+        if (widget.mediaEntity.mediaType == 'movie' && _movieDetails != null) {
+          content = MovieDetails(movie: _movieDetails!);
+        } else if (widget.mediaEntity.mediaType == 'tv' && _tvDetails != null) {
+          content = TvDetails(tv: _tvDetails!);
+        } else if (widget.mediaEntity.mediaType == 'person' &&
+            _actorDetails != null) {
+          content = ActorDetails(actor: _actorDetails!);
+        } else {
+          content = Scaffold(
+            body: Center(child: Text('No details available.')),
+          );
+        }
+
+        // Only show FAB if the mediaType is not "person"
+        bool showFAB = widget.mediaEntity.mediaType != "person";
+
+        return Scaffold(
+          body: content,
+          floatingActionButton: showFAB ? _watchlistButtonFAB() : null,
+        );
+      },
+    );
   }
 }

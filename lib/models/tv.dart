@@ -30,16 +30,14 @@ class TV {
       required this.voteCount});
 
   factory TV.fromJson(Map<String, dynamic> json) {
-    // Extracting genre ids list from JSON
-    List<dynamic> genreIdsJson = json["genre_ids"] ?? [];
-
-    // Converting genre ids to integers
-    List<int> genreIds = genreIdsJson.map((id) => id as int).toList();
+    // Extracting genre objects from JSON
+    List<dynamic> genresJson = json['genres'] ?? [];
+    List<int> genreIds = genresJson.map((genre) => genre['id'] as int).toList();
 
     return TV(
       backdropPath: json["backdrop_path"] ?? "",
       id: json["id"] ?? -1,
-      title: json["title"] ?? "",
+      title: json["title"] ?? json["name"] ?? "",
       originalLanguage: json["original_language"] ?? "",
       originalName: json["original_title"] ?? json["original_name"] ?? "",
       overview: json["overview"] ?? "",

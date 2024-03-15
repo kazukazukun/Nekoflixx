@@ -3,16 +3,17 @@ import 'package:google_fonts/google_fonts.dart';
 
 class Tag extends StatelessWidget {
   const Tag({
-    super.key,
+    Key? key,
     required this.txt,
     required this.content,
-  });
+  }) : super(key: key);
 
   final String txt;
   final String content;
 
   @override
   Widget build(BuildContext context) {
+    String contentValue = content.isNotEmpty ? ": $content" : "";
     return Container(
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
@@ -21,12 +22,12 @@ class Tag extends StatelessWidget {
       child: Row(
         children: [
           Text(
-            "$txt: ",
+            txt,
             style:
                 GoogleFonts.roboto(fontSize: 17, fontWeight: FontWeight.bold),
           ),
           Text(
-            content,
+            contentValue,
             style:
                 GoogleFonts.roboto(fontSize: 17, fontWeight: FontWeight.bold),
           )

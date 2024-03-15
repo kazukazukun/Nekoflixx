@@ -12,14 +12,22 @@ class API {
   static const String _baseUrl = "https://api.themoviedb.org/3";
   static const String _apiKey = Constants.apiKey;
 
-  Future<List<MediaEntity>> _fetchMedia(String endPoint, String ending) async {
+  Future<List<MediaEntity>> _fetchMedia(
+      String endPoint, String ending, String mediaType) async {
     final response = await http
         .get(Uri.parse("$_baseUrl/$endPoint?api_key=$_apiKey$ending"));
     if (response.statusCode == 200) {
       final decodedData = jsonDecode(response.body)["results"] as List;
-      return decodedData
+      List<MediaEntity> mediaList = decodedData
           .map((mediaEntity) => MediaEntity.fromJson(mediaEntity))
           .toList();
+      if (mediaType.isNotEmpty) {
+        for (var media in mediaList) {
+          media.mediaType = mediaType;
+        }
+      }
+
+      return mediaList;
     } else {
       throw Exception("Failed to load media");
     }
@@ -41,9 +49,9 @@ class API {
         .get(Uri.parse("$_baseUrl/$endPoint?api_key=$_apiKey$ending"));
     if (response.statusCode == 200) {
       final decodedData = jsonDecode(response.body);
-      return decodedData.map((genres) => Actor.fromJson(genres));
+      return Actor.fromJson(decodedData); // Changed line
     } else {
-      throw Exception("Failed to load media");
+      throw Exception("Failed to load actor details");
     }
   }
 
@@ -52,9 +60,9 @@ class API {
         .get(Uri.parse("$_baseUrl/$endPoint?api_key=$_apiKey$ending"));
     if (response.statusCode == 200) {
       final decodedData = jsonDecode(response.body);
-      return decodedData.map((genres) => Movie.fromJson(genres));
+      return Movie.fromJson(decodedData); // Changed line
     } else {
-      throw Exception("Failed to load media");
+      throw Exception("Failed to load movie details");
     }
   }
 
@@ -63,47 +71,49 @@ class API {
         .get(Uri.parse("$_baseUrl/$endPoint?api_key=$_apiKey$ending"));
     if (response.statusCode == 200) {
       final decodedData = jsonDecode(response.body);
-      return decodedData.map((genres) => TV.fromJson(genres));
+      return TV.fromJson(decodedData); // Changed line
     } else {
-      throw Exception("Failed to load media");
+      throw Exception("Failed to load TV details");
     }
   }
 
   Future<List<MediaEntity>> getNowPlayingMovies() async {
-    return _fetchMedia("movie/now_playing", "");
+    return _fetchMedia("movie/now_playing", "", "movie");
   }
 
   Future<List<MediaEntity>> getTvTonights() async {
-    return _fetchMedia("tv/airing_today", "");
+    return _fetchMedia("tv/airing_today", "", "tv");
   }
 
   Future<List<MediaEntity>> getBestMoviesThisYear() async {
-    return _fetchMedia("discover/movie",
-        "&primary_release_year=${DateTime.now().year.toString()}&sort_by=popularity.desc");
+    return _fetchMedia(
+        "discover/movie",
+        "&primary_release_year=${DateTime.now().year.toString()}&sort_by=popularity.desc",
+        "movie");
   }
 
   Future<List<MediaEntity>> getTopGrossingMovies() async {
-    return _fetchMedia("discover/movie", "&sort_by=revenue.desc");
+    return _fetchMedia("discover/movie", "&sort_by=revenue.desc", "movie");
   }
 
   Future<List<MediaEntity>> getSearchedList(String query) async {
-    return _fetchMedia("search/multi", "&query=$query");
+    return _fetchMedia("search/multi", "&query=$query", "");
   }
 
   Future<List<MediaEntity>> getSimilarMovies(int movieID) async {
-    return _fetchMedia("movie/$movieID/similar", "");
+    return _fetchMedia("movie/$movieID/similar", "", "movie");
   }
 
   Future<List<MediaEntity>> getSimilarTvs(int tvID) async {
-    return _fetchMedia("tv/$tvID/similar", "");
+    return _fetchMedia("tv/$tvID/similar", "", "tv");
   }
 
   Future<List<MediaEntity>> getMovieByID(int movieID) async {
-    return _fetchMedia("movie/$movieID", "");
+    return _fetchMedia("movie/$movieID", "", "movie");
   }
 
   Future<List<MediaEntity>> getTvByID(int tvID) async {
-    return _fetchMedia("tv/$tvID", "");
+    return _fetchMedia("tv/$tvID", "", "tv");
   }
 
   Future<List<Genre>> getMovieGenres() async {
@@ -118,8 +128,8 @@ class API {
     if (genreID == -1) {
       return _getMoviesWithAllGenres();
     }
-    return _fetchMedia(
-        "/discover/movie", "&with_genres=$genreID&sort_by=popularity.desc");
+    return _fetchMedia("/discover/movie",
+        "&with_genres=$genreID&sort_by=popularity.desc", "movie");
   }
 
   Future<List<MediaEntity>> getTvsByGenre(int genreID) async {
@@ -127,15 +137,15 @@ class API {
       return _getTvsWithAllGenres();
     }
     return _fetchMedia(
-        "/discover/tv", "&with_genres=$genreID&sort_by=popularity.desc");
+        "/discover/tv", "&with_genres=$genreID&sort_by=popularity.desc", "tv");
   }
 
   Future<List<MediaEntity>> _getMoviesWithAllGenres() async {
-    return _fetchMedia("/discover/movie", "&sort_by=popularity.desc");
+    return _fetchMedia("/discover/movie", "&sort_by=popularity.desc", "movie");
   }
 
   Future<List<MediaEntity>> _getTvsWithAllGenres() async {
-    return _fetchMedia("/discover/tv", "&sort_by=popularity.desc");
+    return _fetchMedia("/discover/tv", "&sort_by=popularity.desc", "tv");
   }
 
   Future<Actor> getActorDetails(int id) async {

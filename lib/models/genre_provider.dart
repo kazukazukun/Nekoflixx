@@ -20,4 +20,25 @@ class GenreProvider extends ChangeNotifier {
     }
     notifyListeners();
   }
+
+  String getGenreFromId(int genreId) {
+    print("Searching for genreId: $genreId");
+    String genreName = 'Unknown';
+    for (var genre in _movieGenres) {
+      if (genre.genreId == genreId) {
+        genreName = genre.genreName;
+        break;
+      }
+    }
+    if (genreName == 'Unknown') {
+      for (var genre in _tvGenres) {
+        if (genre.genreId == genreId) {
+          genreName = genre.genreName;
+          break;
+        }
+      }
+    }
+    print("Found genreName: $genreName for genreId: $genreId");
+    return genreName;
+  }
 }

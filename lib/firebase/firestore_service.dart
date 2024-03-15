@@ -24,6 +24,21 @@ class FirestoreService {
     }
   }
 
+  Future<String> getUsername() async {
+    var uid = _auth.currentUser?.uid;
+    var docSnapshot = await _db.collection('users').doc(uid).get();
+    if (docSnapshot.exists) {
+      Map<String, dynamic>? data = docSnapshot.data();
+      return data?['username'] ?? 'No Username';
+    }
+    return 'No Username';
+  }
+
+  Future<List<MediaEntity>> getWatchlistMediaEntities() async {
+    var snapshot = await getWatchlist();
+    return snapshot.docs.map((doc) => MediaEntity.fromFirestore(doc)).toList();
+  }
+
   Future<bool> isInWatchlist(String itemId) async {
     var doc = await _db.collection(userPath).doc(itemId).get();
     return doc.exists;
